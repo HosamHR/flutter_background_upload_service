@@ -1,14 +1,12 @@
-package id.flutter.flutter_background_service;
+package id.flutter.flutter_background_upload_service;
 
 import static android.os.Build.VERSION.SDK_INT;
 
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -17,7 +15,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -27,9 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.flutter.FlutterInjector;
@@ -39,11 +34,10 @@ import io.flutter.embedding.engine.loader.FlutterLoader;
 import io.flutter.plugin.common.JSONMethodCodec;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry;
 
-public class BackgroundService extends Service implements MethodChannel.MethodCallHandler {
-    private static final String TAG = "BackgroundService";
-    private static final String LOCK_NAME = BackgroundService.class.getName()
+public class BackgroundUploadService extends Service implements MethodChannel.MethodCallHandler {
+    private static final String TAG = "BackgroundUploadService";
+    private static final String LOCK_NAME = BackgroundUploadService.class.getName()
             + ".Lock";
     public static volatile WakeLock lockStatic = null; // notice static
     AtomicBoolean isRunning = new AtomicBoolean(false);
@@ -84,7 +78,7 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
     public void onCreate() {
         super.onCreate();
 
-        FlutterBackgroundServicePlugin.servicePipe.addListener(listener);
+        FlutterBackgroundUploadServicePlugin.servicePipe.addListener(listener);
 
         config = new Config(this);
         mainHandler = new Handler(Looper.getMainLooper());
@@ -107,7 +101,7 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
     @Override
     public void onDestroy() {
         if (!isManuallyStopped) {
-            WatchdogReceiver.enqueue(this);
+            WatchdogUploadReceiver.enqueue(this);
         } else {
             config.setManuallyStopped(true);
         }
@@ -122,7 +116,7 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
 
         methodChannel = null;
         dartEntrypoint = null;
-        FlutterBackgroundServicePlugin.servicePipe.removeListener(listener);
+        FlutterBackgroundUploadServicePlugin.servicePipe.removeListener(listener);
         super.onDestroy();
     }
 
@@ -157,7 +151,7 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
                 flags |= PendingIntent.FLAG_MUTABLE;
             }
 
-            PendingIntent pi = PendingIntent.getActivity(BackgroundService.this, 11, i, flags);
+            PendingIntent pi = PendingIntent.getActivity(BackgroundUploadService.this, 11, i, flags);
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, notificationChannelId)
                     .setSmallIcon(R.drawable.ic_bg_service_small)
                     .setAutoCancel(true)
@@ -173,7 +167,7 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         config.setManuallyStopped(false);
-        WatchdogReceiver.enqueue(this);
+        WatchdogUploadReceiver.enqueue(this);
         runService();
 
         return START_STICKY;
@@ -204,9 +198,9 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
             backgroundEngine = new FlutterEngine(this);
 
             // remove FlutterBackgroundServicePlugin (because its only for UI)
-            backgroundEngine.getPlugins().remove(FlutterBackgroundServicePlugin.class);
+            backgroundEngine.getPlugins().remove(FlutterBackgroundUploadServicePlugin.class);
 
-            backgroundEngine.getServiceControlSurface().attachToService(BackgroundService.this, null, config.isForeground());
+            backgroundEngine.getServiceControlSurface().attachToService(BackgroundUploadService.this, null, config.isForeground());
 
             methodChannel = new MethodChannel(backgroundEngine.getDartExecutor().getBinaryMessenger(), "id.flutter/background_service_android_bg", JSONMethodCodec.INSTANCE);
             methodChannel.setMethodCallHandler(this);
@@ -247,7 +241,7 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         if (isRunning.get()) {
-            WatchdogReceiver.enqueue(getApplicationContext(), 1000);
+            WatchdogUploadReceiver.enqueue(getApplicationContext(), 1000);
         }
     }
 
@@ -299,7 +293,7 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
 
             if (method.equalsIgnoreCase("stopService")) {
                 isManuallyStopped = true;
-                WatchdogReceiver.remove(this);
+                WatchdogUploadReceiver.remove(this);
                 stopSelf();
                 result.success(true);
                 return;
@@ -307,8 +301,8 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
 
             if (method.equalsIgnoreCase("sendData")) {
                 try {
-                    if (FlutterBackgroundServicePlugin.mainPipe.hasListener()){
-                        FlutterBackgroundServicePlugin.mainPipe.invoke((JSONObject) call.arguments);
+                    if (FlutterBackgroundUploadServicePlugin.mainPipe.hasListener()){
+                        FlutterBackgroundUploadServicePlugin.mainPipe.invoke((JSONObject) call.arguments);
                     }
 
                     result.success(true);

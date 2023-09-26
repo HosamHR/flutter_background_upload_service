@@ -1,12 +1,9 @@
-package id.flutter.flutter_background_service;
+package id.flutter.flutter_background_upload_service;
 
 import android.app.ActivityManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Handler;
-import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -19,21 +16,18 @@ import java.util.Map;
 
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
-import io.flutter.embedding.engine.plugins.service.ServiceAware;
-import io.flutter.embedding.engine.plugins.service.ServicePluginBinding;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.JSONMethodCodec;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 /**
  * FlutterBackgroundServicePlugin
  */
-public class FlutterBackgroundServicePlugin implements FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
-    private static final String TAG = "BackgroundServicePlugin";
+public class FlutterBackgroundUploadServicePlugin implements FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
+    private static final String TAG = "FlutterBackgroundUploadServicePlugin";
     private Handler mainHandler;
     private Config config;
     private MethodChannel channel;
@@ -64,19 +58,19 @@ public class FlutterBackgroundServicePlugin implements FlutterPlugin, MethodCall
 
         mainHandler = new Handler(context.getMainLooper());
 
-        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "id.flutter/background_service/android/method", JSONMethodCodec.INSTANCE);
+        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "id.flutter/background_upload_service/android/method", JSONMethodCodec.INSTANCE);
         channel.setMethodCallHandler(this);
 
-        eventChannel = new EventChannel(flutterPluginBinding.getBinaryMessenger(), "id.flutter/background_service/android/event", JSONMethodCodec.INSTANCE);
+        eventChannel = new EventChannel(flutterPluginBinding.getBinaryMessenger(), "id.flutter/background_upload_service/android/event", JSONMethodCodec.INSTANCE);
         eventChannel.setStreamHandler(this);
 
         mainPipe.addListener(listener);
     }
 
     private void start() {
-        WatchdogReceiver.enqueue(context);
+        WatchdogUploadReceiver.enqueue(context);
         boolean isForeground = config.isForeground();
-        Intent intent = new Intent(context, BackgroundService.class);
+        Intent intent = new Intent(context, BackgroundUploadService.class);
 
         if (isForeground) {
             ContextCompat.startForegroundService(context, intent);
@@ -150,7 +144,7 @@ public class FlutterBackgroundServicePlugin implements FlutterPlugin, MethodCall
     private boolean isServiceRunning() {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (BackgroundService.class.getName().equals(service.service.getClassName())) {
+            if (BackgroundUploadService.class.getName().equals(service.service.getClassName())) {
                 return true;
             }
         }

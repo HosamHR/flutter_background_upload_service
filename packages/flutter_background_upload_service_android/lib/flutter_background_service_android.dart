@@ -19,17 +19,18 @@ Future<void> entrypoint(List<String> args) async {
   }
 }
 
-class FlutterBackgroundServiceAndroid extends FlutterBackgroundServicePlatform {
-  /// Registers this class as the default instance of [FlutterBackgroundServicePlatform].
+class FlutterBackgroundUploadServiceAndroid
+    extends FlutterBackgroundUploadServicePlatform {
+  /// Registers this class as the default instance of [FlutterBackgroundUploadServicePlatform].
   static void registerWith() {
-    FlutterBackgroundServicePlatform.instance =
-        FlutterBackgroundServiceAndroid();
+    FlutterBackgroundUploadServicePlatform.instance =
+        FlutterBackgroundUploadServiceAndroid();
   }
 
-  FlutterBackgroundServiceAndroid._();
-  static final FlutterBackgroundServiceAndroid _instance =
-      FlutterBackgroundServiceAndroid._();
-  factory FlutterBackgroundServiceAndroid() => _instance;
+  FlutterBackgroundUploadServiceAndroid._();
+  static final FlutterBackgroundUploadServiceAndroid _instance =
+      FlutterBackgroundUploadServiceAndroid._();
+  factory FlutterBackgroundUploadServiceAndroid() => _instance;
 
   Future<void> _handleMethodCall(MethodCall call) async {
     debugPrint(call.method);

@@ -1,4 +1,4 @@
-package id.flutter.flutter_background_service;
+package id.flutter.flutter_background_upload_service;
 
 import org.json.JSONObject;
 

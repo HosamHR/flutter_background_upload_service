@@ -1,4 +1,4 @@
-package id.flutter.flutter_background_service;
+package id.flutter.flutter_background_upload_service;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,7 +7,7 @@ public class Config {
     final SharedPreferences pref;
 
     public Config(Context context) {
-        this.pref = context.getSharedPreferences("id.flutter.background_service", Context.MODE_PRIVATE);
+        this.pref = context.getSharedPreferences("id.flutter.background_upload_service", Context.MODE_PRIVATE);
     }
 
     public boolean isAutoStartOnBoot() {

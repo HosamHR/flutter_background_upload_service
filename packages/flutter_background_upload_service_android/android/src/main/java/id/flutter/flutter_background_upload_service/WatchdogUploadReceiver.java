@@ -1,4 +1,4 @@
-package id.flutter.flutter_background_service;
+package id.flutter.flutter_background_upload_service;
 
 import static android.content.Context.ALARM_SERVICE;
 import static android.os.Build.VERSION.SDK_INT;
@@ -14,7 +14,7 @@ import android.os.Build;
 import androidx.core.app.AlarmManagerCompat;
 import androidx.core.content.ContextCompat;
 
-public class WatchdogReceiver extends BroadcastReceiver {
+public class WatchdogUploadReceiver extends BroadcastReceiver {
     private static final int QUEUE_REQUEST_ID = 111;
     private static final String ACTION_RESPAWN = "id.flutter.background_service.RESPAWN";
 
@@ -23,7 +23,7 @@ public class WatchdogReceiver extends BroadcastReceiver {
     }
 
     public static void enqueue(Context context, int millis) {
-        Intent intent = new Intent(context, WatchdogReceiver.class);
+        Intent intent = new Intent(context, WatchdogUploadReceiver.class);
         intent.setAction(ACTION_RESPAWN);
         AlarmManager manager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
 
@@ -39,7 +39,7 @@ public class WatchdogReceiver extends BroadcastReceiver {
     }
 
     public static void remove(Context context) {
-        Intent intent = new Intent(context, WatchdogReceiver.class);
+        Intent intent = new Intent(context, WatchdogUploadReceiver.class);
         intent.setAction(ACTION_RESPAWN);
 
         int flags = PendingIntent.FLAG_CANCEL_CURRENT;
@@ -47,7 +47,7 @@ public class WatchdogReceiver extends BroadcastReceiver {
             flags |= PendingIntent.FLAG_MUTABLE;
         }
 
-        PendingIntent pi = PendingIntent.getBroadcast(context, WatchdogReceiver.QUEUE_REQUEST_ID, intent, flags);
+        PendingIntent pi = PendingIntent.getBroadcast(context, WatchdogUploadReceiver.QUEUE_REQUEST_ID, intent, flags);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         alarmManager.cancel(pi);
     }
@@ -60,16 +60,16 @@ public class WatchdogReceiver extends BroadcastReceiver {
 
             ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-                if (BackgroundService.class.getName().equals(service.service.getClassName())) {
+                if (BackgroundUploadService.class.getName().equals(service.service.getClassName())) {
                     isRunning = true;
                 }
             }
 
             if (!config.isManuallyStopped() && !isRunning) {
                 if (config.isForeground()) {
-                    ContextCompat.startForegroundService(context, new Intent(context, BackgroundService.class));
+                    ContextCompat.startForegroundService(context, new Intent(context, BackgroundUploadService.class));
                 } else {
-                    context.startService(new Intent(context, BackgroundService.class));
+                    context.startService(new Intent(context, BackgroundUploadService.class));
                 }
             }
         }

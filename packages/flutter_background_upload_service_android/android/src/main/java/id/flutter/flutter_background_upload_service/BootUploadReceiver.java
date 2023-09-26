@@ -1,4 +1,4 @@
-package id.flutter.flutter_background_service;
+package id.flutter.flutter_background_upload_service;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -8,7 +8,7 @@ import android.content.Intent;
 import androidx.core.content.ContextCompat;
 
 
-public class BootReceiver extends BroadcastReceiver {
+public class BootUploadReceiver extends BroadcastReceiver {
     @SuppressLint("WakelockTimeout")
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -16,14 +16,14 @@ public class BootReceiver extends BroadcastReceiver {
             final Config config = new Config(context);
             boolean autoStart = config.isAutoStartOnBoot();
             if (autoStart) {
-                if (BackgroundService.lockStatic == null) {
-                    BackgroundService.getLock(context).acquire();
+                if (BackgroundUploadService.lockStatic == null) {
+                    BackgroundUploadService.getLock(context).acquire();
                 }
 
                 if (config.isForeground()) {
-                    ContextCompat.startForegroundService(context, new Intent(context, BackgroundService.class));
+                    ContextCompat.startForegroundService(context, new Intent(context, BackgroundUploadService.class));
                 } else {
-                    context.startService(new Intent(context, BackgroundService.class));
+                    context.startService(new Intent(context, BackgroundUploadService.class));
                 }
             }
         }
