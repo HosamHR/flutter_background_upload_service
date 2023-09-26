@@ -49,12 +49,12 @@ class FlutterBackgroundUploadServiceAndroid
   }
 
   final MethodChannel _channel = MethodChannel(
-    'id.flutter/background_service/android/method',
+    'id.flutter/background_upload_service/android/method',
     JSONMethodCodec(),
   );
 
   final EventChannel _eventChannel = EventChannel(
-    'id.flutter/background_service/android/event',
+    'id.flutter/background_upload_service/android/event',
     JSONMethodCodec(),
   );
 
@@ -133,7 +133,7 @@ class FlutterBackgroundUploadServiceAndroid
 
 class AndroidServiceInstance extends ServiceInstance {
   static const MethodChannel _channel = const MethodChannel(
-    'id.flutter/background_service_android_bg',
+    'id.flutter/background_upload_service_android_bg',
     JSONMethodCodec(),
   );
 
