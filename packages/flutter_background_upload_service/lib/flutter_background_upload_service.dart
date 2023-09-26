@@ -2,14 +2,14 @@ library flutter_background_service;
 
 import 'dart:async';
 
-import 'package:flutter_background_service_platform_interface/flutter_background_service_platform_interface.dart';
+import 'package:flutter_background_upload_service_platform_interface/flutter_background_service_platform_interface.dart';
 
-export 'package:flutter_background_service_platform_interface/flutter_background_service_platform_interface.dart'
+export 'package:flutter_background_upload_service_platform_interface/flutter_background_service_platform_interface.dart'
     show IosConfiguration, AndroidConfiguration, ServiceInstance;
 
-class FlutterBackgroundService implements Observable {
-  FlutterBackgroundServicePlatform get _platform =>
-      FlutterBackgroundServicePlatform.instance;
+class FlutterBackgroundUploadService implements Observable {
+  FlutterBackgroundUploadServicePlatform get _platform =>
+      FlutterBackgroundUploadServicePlatform.instance;
 
   /// configure the background service handler
   /// it's highly recommended to call this method in main() method
@@ -22,12 +22,12 @@ class FlutterBackgroundService implements Observable {
         androidConfiguration: androidConfiguration,
       );
 
-  static FlutterBackgroundService _instance =
-      FlutterBackgroundService._internal();
+  static FlutterBackgroundUploadService _instance =
+      FlutterBackgroundUploadService._internal();
 
-  FlutterBackgroundService._internal();
+  FlutterBackgroundUploadService._internal();
 
-  factory FlutterBackgroundService() => _instance;
+  factory FlutterBackgroundUploadService() => _instance;
 
   /// Starts the background service.
   Future<bool> startService() => _platform.start();

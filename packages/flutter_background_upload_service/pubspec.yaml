@@ -1,4 +1,4 @@
-name: flutter_background_service
+name: flutter_background_upload_service
 description: A flutter plugin for executing dart code continously even application closed.
 version: 5.0.1
 repository: https://github.com/ekasetiawans/flutter_background_service
@@ -14,9 +14,18 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_background_service_platform_interface: ^5.0.0
-  flutter_background_service_android: ^6.0.1
-  flutter_background_service_ios: ^5.0.0
+  flutter_background_upload_service_platform_interface:
+    git:
+      url: https://github.com/HosamHR/flutter_background_upload_service.git
+      ref: background_upload_variant
+      path: packages/flutter_background_upload_service_platform_interface
+
+  flutter_background_upload_service_android:
+    git:
+      url: https://github.com/HosamHR/flutter_background_upload_service.git
+      ref: background_upload_variant
+      path: packages/flutter_background_upload_service_android
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -33,6 +42,4 @@ flutter:
   plugin:
     platforms:
       android:
-        default_package: flutter_background_service_android
-      ios:
-        default_package: flutter_background_service_ios
+        default_package: flutter_background_upload_service_android

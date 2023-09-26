@@ -4,8 +4,9 @@ import 'dart:ui';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
-import 'package:flutter_background_service_android/flutter_background_service_android.dart';
+import 'package:flutter_background_upload_service/flutter_background_upload_service.dart';
+import 'package:flutter_background_upload_service_android/flutter_background_service_android.dart';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,7 +17,7 @@ Future<void> main() async {
 }
 
 Future<void> initializeService() async {
-  final service = FlutterBackgroundService();
+  final service = FlutterBackgroundUploadService();
 
   /// OPTIONAL, using custom notification channel id
   const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -38,7 +39,6 @@ Future<void> initializeService() async {
       ),
     );
   }
-
 
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
@@ -193,7 +193,7 @@ class _MyAppState extends State<MyApp> {
         body: Column(
           children: [
             StreamBuilder<Map<String, dynamic>?>(
-              stream: FlutterBackgroundService().on('update'),
+              stream: FlutterBackgroundUploadService().on('update'),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Center(
@@ -215,19 +215,19 @@ class _MyAppState extends State<MyApp> {
             ElevatedButton(
               child: const Text("Foreground Mode"),
               onPressed: () {
-                FlutterBackgroundService().invoke("setAsForeground");
+                FlutterBackgroundUploadService().invoke("setAsForeground");
               },
             ),
             ElevatedButton(
               child: const Text("Background Mode"),
               onPressed: () {
-                FlutterBackgroundService().invoke("setAsBackground");
+                FlutterBackgroundUploadService().invoke("setAsBackground");
               },
             ),
             ElevatedButton(
               child: Text(text),
               onPressed: () async {
-                final service = FlutterBackgroundService();
+                final service = FlutterBackgroundUploadService();
                 var isRunning = await service.isRunning();
                 if (isRunning) {
                   service.invoke("stopService");

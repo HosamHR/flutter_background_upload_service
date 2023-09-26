@@ -30,16 +30,16 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_background_service:
+  flutter_background_upload_service:
     # When depending on this package from a real application you should use:
     #   flutter_background_service: ^x.y.z
     # See https://dart.dev/tools/pub/dependencies#version-constraints
     # The example app is bundled with the plugin so we use a path dependency on
     # the parent directory to use the current plugin's version.
     path: ../
+  flutter_background_upload_service_android:
+    path: ../../flutter_background_upload_service_android
 
-  flutter_background_service_ios: ^5.0.0
-  flutter_background_service_android: ^6.0.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.5
@@ -48,6 +48,12 @@ dependencies:
 
   # optional if you wish to use a custom foreground service notification
   flutter_local_notifications: ^14.1.1
+
+dependency_overrides:
+  flutter_background_upload_service_platform_interface:
+    path: ../../flutter_background_upload_service_platform_interface
+  flutter_background_upload_service_android:
+    path: ../../flutter_background_upload_service_android
 
 dev_dependencies:
   flutter_test:

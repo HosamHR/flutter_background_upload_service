@@ -5,7 +5,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_background_service_platform_interface/flutter_background_service_platform_interface.dart';
+import 'package:flutter_background_upload_service_platform_interface/flutter_background_service_platform_interface.dart';
 
 @pragma('vm:entry-point')
 Future<void> entrypoint(List<String> args) async {
