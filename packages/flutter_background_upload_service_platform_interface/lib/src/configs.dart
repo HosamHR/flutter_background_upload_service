@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter_background_service_platform_interface/flutter_background_service_platform_interface.dart';
+import 'package:flutter_background_upload_service_platform_interface/flutter_background_service_platform_interface.dart';
 
 class IosConfiguration {
   /// must be a top level or static method

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter_background_service_platform_interface/src/configs.dart';
+import 'package:flutter_background_upload_service_platform_interface/src/configs.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 export 'src/configs.dart';
@@ -10,14 +10,14 @@ abstract class Observable {
   Stream<Map<String, dynamic>?> on(String method);
 }
 
-abstract class FlutterBackgroundServicePlatform extends PlatformInterface
+abstract class FlutterBackgroundUploadServicePlatform extends PlatformInterface
     implements Observable {
-  FlutterBackgroundServicePlatform() : super(token: _token);
+  FlutterBackgroundUploadServicePlatform() : super(token: _token);
   static final Object _token = Object();
 
-  static FlutterBackgroundServicePlatform? _instance;
+  static FlutterBackgroundUploadServicePlatform? _instance;
 
-  static FlutterBackgroundServicePlatform get instance {
+  static FlutterBackgroundUploadServicePlatform get instance {
     if (_instance == null) {
       throw 'FlutterBackgroundService is currently supported for Android and iOS Platform only.';
     }
@@ -26,8 +26,8 @@ abstract class FlutterBackgroundServicePlatform extends PlatformInterface
   }
 
   /// Platform-specific plugins should set this with their own platform-specific
-  /// class that extends [FlutterBackgroundServicePlatform] when they register themselves.
-  static set instance(FlutterBackgroundServicePlatform instance) {
+  /// class that extends [FlutterBackgroundUploadServicePlatform] when they register themselves.
+  static set instance(FlutterBackgroundUploadServicePlatform instance) {
     PlatformInterface.verify(instance, _token);
     _instance = instance;
   }
