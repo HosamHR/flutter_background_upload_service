@@ -205,7 +205,7 @@ public class BackgroundUploadService extends Service implements MethodChannel.Me
             methodChannel = new MethodChannel(backgroundEngine.getDartExecutor().getBinaryMessenger(), "id.flutter/background_upload_service_android_bg", JSONMethodCodec.INSTANCE);
             methodChannel.setMethodCallHandler(this);
 
-            dartEntrypoint = new DartExecutor.DartEntrypoint(flutterLoader.findAppBundlePath(), "package:flutter_background_service_android/flutter_background_service_android.dart", "entrypoint");
+            dartEntrypoint = new DartExecutor.DartEntrypoint(flutterLoader.findAppBundlePath(), "package:flutter_background_upload_service_android/flutter_background_upload_service_android.dart", "entrypoint");
 
             final List<String> args = new ArrayList<>();
             long backgroundHandle = config.getBackgroundHandle();
