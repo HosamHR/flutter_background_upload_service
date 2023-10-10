@@ -2,9 +2,9 @@ library flutter_background_service;
 
 import 'dart:async';
 
-import 'package:flutter_background_upload_service_platform_interface/flutter_background_service_platform_interface.dart';
+import 'package:flutter_background_upload_service_platform_interface/flutter_background_upload_service_platform_interface.dart';
 
-export 'package:flutter_background_upload_service_platform_interface/flutter_background_service_platform_interface.dart'
+export 'package:flutter_background_upload_service_platform_interface/flutter_background_upload_service_platform_interface.dart'
     show IosConfiguration, AndroidConfiguration, ServiceInstance;
 
 class FlutterBackgroundUploadService implements Observable {
