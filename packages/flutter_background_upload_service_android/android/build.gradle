@@ -1,4 +1,4 @@
-group 'id.flutter.flutter_background_service'
+group 'id.flutter.flutter_background_upload_service'
 version '1.0'
 
 buildscript {
